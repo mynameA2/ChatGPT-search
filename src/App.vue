@@ -1,26 +1,79 @@
 <script setup lang="ts">
 import ChatBox from './components/ChatBox.vue'
 
-const skills = ['Vue 3', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'Node.js', 'Express', 'REST API', 'Git']
+const skills = [
+  'Vue.js',
+  'Nuxt.js',
+  'TypeScript',
+  'JavaScript',
+  'Pinia',
+  'Bootstrap',
+  'Axios',
+  'REST API',
+  'WebSocket',
+  'PHP',
+  'Docker Compose',
+  'FSD',
+  'ESLint',
+  'Git',
+]
+
+const experience = [
+  {
+    company: 'Вайти',
+    role: 'Junior+ Frontend Developer',
+    period: 'Ноябрь 2024 — настоящее время',
+    description:
+      'Разрабатываю и поддерживаю приложение Olhar: переиспользуемые UI-компоненты, формы, модальные окна, авторизация и ролевая модель доступа.',
+    details: [
+      'Интегрирую frontend с JSON API и WebSocket, настраиваю получение, отображение и обновление данных.',
+      'Участвую в доработке серверной логики на PHP: подготовка данных для таблиц, контроллеры и дефолтные значения.',
+      'Рефакторю ключевые модули, сокращаю дублирование и оптимизирую сценарии работы с большим объёмом данных.',
+    ],
+    tags: ['Vue.js', 'Pinia', 'Bootstrap', 'Axios', 'WebSocket', 'PHP'],
+  },
+  {
+    company: 'Trucker',
+    role: 'Junior Frontend-разработчик',
+    period: 'Октябрь 2023 — ноябрь 2024',
+    description:
+      'Проектировал и разрабатывал frontend-части веб-приложений, создавал независимые компоненты и участвовал в развитии архитектуры.',
+    details: [
+      'Работал с Vue.js, Nuxt.js и Pinia, взаимодействовал с RESTful API через Axios.',
+      'Использовал FSD, Docker Compose и WebSocket, участвовал в оптимизации производительности.',
+      'Интегрировал и настраивал ESLint для повышения качества кода.',
+    ],
+    tags: ['Vue.js', 'Nuxt.js', 'FSD', 'Docker Compose', 'REST API', 'ESLint'],
+  },
+]
 
 const projects = [
   {
     number: '01',
-    title: 'AI Voice Assistant',
+    title: 'Olhar',
     description:
-      'Голосовой AI-интерфейс на Vue 3 с распознаванием речи, backend-прокси и аккуратной обработкой состояний.',
-    tags: ['Vue 3', 'OpenAI API', 'Web Speech API'],
-    link: '#assistant',
-    linkLabel: 'Попробовать',
+      'Рабочее приложение с серверными данными: переиспользуемые компоненты, формы, модальные окна, авторизация, роли пользователей и оптимизация интерфейса.',
+    tags: ['Vue.js', 'Pinia', 'Bootstrap', 'Axios', 'WebSocket', 'PHP'],
+    link: '#experience',
+    linkLabel: 'Опыт',
   },
   {
     number: '02',
-    title: 'Следующий проект',
+    title: 'Криптосоциальная сеть',
     description:
-      'Здесь может быть твой следующий сильный кейс: сервис, интерфейс или эксперимент, которым хочется поделиться.',
-    tags: ['Your idea', 'Coming soon'],
-    link: '#contact',
-    linkLabel: 'Обсудить',
+      'Текущий проект: разрабатываю социальную сеть для криптосообщества. Подробности и технологические решения будут добавляться по мере развития продукта.',
+    tags: ['In progress', 'Crypto', 'Social network'],
+    link: '#assistant',
+    linkLabel: 'Спросить AI',
+  },
+  {
+    number: '03',
+    title: 'AI Voice Assistant',
+    description:
+      'Эта AI-визитка: голосовой HR-ассистент на Vue 3 с распознаванием речи, backend-прокси и ответами по профилю кандидата.',
+    tags: ['Vue 3', 'OpenAI API', 'Web Speech API', 'Express'],
+    link: '#assistant',
+    linkLabel: 'Попробовать',
   },
 ]
 </script>
@@ -34,6 +87,7 @@ const projects = [
 
       <nav class="desktop-nav" aria-label="Основная навигация">
         <a href="#about">Обо мне</a>
+        <a href="#experience">Опыт</a>
         <a href="#projects">Проекты</a>
         <a href="#assistant">Спросить AI</a>
       </nav>
@@ -54,8 +108,8 @@ const projects = [
             digital-продукты.
           </h1>
           <p class="hero-text">
-            Frontend-разработчик с вниманием к деталям. Собираю современные интерфейсы,
-            подключаю API и превращаю идеи в работающие веб-приложения.
+            Frontend-разработчик с коммерческим опытом. Создаю переиспользуемые компоненты,
+            интегрирую API и превращаю сложные сценарии в понятные интерфейсы.
           </p>
           <div class="hero-actions">
             <a class="button button-primary" href="#projects">
@@ -100,8 +154,8 @@ const projects = [
               лишнего шума. Быстро погружаюсь в контекст и довожу идеи до работающего результата.
             </p>
             <p>
-              Развиваюсь в современной frontend-разработке и исследую возможности AI в обычных
-              веб-приложениях. Этот сайт — один из таких экспериментов.
+              Работал с приложениями на Vue.js и Nuxt.js, клиент-серверным взаимодействием,
+              авторизацией и ролевым доступом. Сейчас также разрабатываю криптосоциальную сеть.
             </p>
           </div>
           <div class="skill-list" aria-label="Технологии">
@@ -110,9 +164,35 @@ const projects = [
         </div>
       </section>
 
+      <section id="experience" class="experience section-block">
+        <div class="section-heading section-grid">
+          <p class="section-kicker">02 / Опыт</p>
+          <div class="section-content">
+            <h2>Коммерческая разработка<span>.</span></h2>
+          </div>
+        </div>
+
+        <div class="experience-list">
+          <article v-for="job in experience" :key="job.company" class="experience-card section-grid">
+            <p class="experience-period">{{ job.period }}</p>
+            <div class="experience-main">
+              <p class="experience-company">{{ job.company }}</p>
+              <h3>{{ job.role }}</h3>
+              <p>{{ job.description }}</p>
+              <ul>
+                <li v-for="detail in job.details" :key="detail">{{ detail }}</li>
+              </ul>
+              <div class="project-tags">
+                <span v-for="tag in job.tags" :key="tag">{{ tag }}</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section id="projects" class="projects section-block">
         <div class="section-heading section-grid">
-          <p class="section-kicker">02 / Проекты</p>
+          <p class="section-kicker">03 / Проекты</p>
           <div class="section-content">
             <h2>Избранные работы<span>.</span></h2>
           </div>
@@ -138,7 +218,7 @@ const projects = [
 
       <section id="assistant" class="assistant-section section-block">
         <div class="assistant-intro section-grid">
-          <p class="section-kicker">03 / Для HR</p>
+          <p class="section-kicker">04 / Для HR</p>
           <div class="section-content">
             <h2>Узнай обо мне больше<span>.</span></h2>
             <p>
@@ -152,7 +232,7 @@ const projects = [
     </main>
 
     <footer id="contact" class="site-footer section-grid">
-      <p class="section-kicker">04 / Контакты</p>
+      <p class="section-kicker">05 / Контакты</p>
       <div class="footer-main">
         <p class="eyebrow"><span class="status-dot"></span> Давай сделаем что-нибудь классное</p>
         <h2>Есть идея?<br /><span>Напиши мне.</span></h2>

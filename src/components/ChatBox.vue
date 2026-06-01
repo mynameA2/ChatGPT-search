@@ -19,8 +19,8 @@
       </div>
 
       <div class="prompt-list">
-        <button v-for="prompt in prompts" :key="prompt" type="button" @click="selectPrompt(prompt)">
-          {{ prompt }}
+        <button v-for="prompt in prompts" :key="prompt.question" type="button" @click="selectPrompt(prompt)">
+          {{ prompt.question }}
           <span aria-hidden="true">↗</span>
         </button>
       </div>
@@ -78,9 +78,26 @@
 import { ref } from 'vue'
 
 const prompts = [
-  'Какой у кандидата стек?',
-  'Расскажи о проектах',
-  'В чём сильные стороны кандидата?',
+  {
+    question: 'Расскажи об опыте работы',
+    answer:
+      'A2 работает Junior+ Frontend Developer в компании «Вайти» с ноября 2024 года. В приложении Olhar он разрабатывает переиспользуемые UI-компоненты, формы и модальные окна, занимается авторизацией, ролевым доступом, интеграцией с JSON API и WebSocket, а также участвует в PHP-задачах и оптимизации интерфейса. До этого с октября 2023 по ноябрь 2024 года проходил стажировку Frontend-разработчика в Trucker, где работал с Vue.js, Nuxt.js, FSD, Pinia, REST API, Docker Compose и ESLint.',
+  },
+  {
+    question: 'Какой у кандидата стек?',
+    answer:
+      'Основной стек A2: Vue.js, Nuxt.js, TypeScript, JavaScript, Pinia, Bootstrap, Axios, REST API и WebSocket. Также есть опыт работы с PHP, Docker Compose, FSD, ESLint и Git. Для этой AI-визитки используются Vue 3, Node.js, Express и OpenAI API.',
+  },
+  {
+    question: 'Расскажи о проектах',
+    answer:
+      'Ключевые проекты A2: приложение Olhar в компании «Вайти» с переиспользуемыми компонентами, формами, авторизацией и ролевой логикой; текущая криптосоциальная сеть в разработке; AI Voice Assistant — эта интерактивная визитка с голосовым вводом и HR-ассистентом.',
+  },
+  {
+    question: 'В чём сильные стороны кандидата?',
+    answer:
+      'Сильные стороны A2: разработка переиспользуемых компонентов, интеграция frontend с backend API, работа с авторизацией и ролями, рефакторинг и снижение дублирования кода. Он уделяет внимание поддерживаемости интерфейсов и оптимизации сценариев работы с большим объёмом данных.',
+  },
 ]
 
 const input = ref('')
@@ -142,8 +159,10 @@ if (SpeechRecognition) {
   }
 }
 
-function selectPrompt(prompt: string) {
-  input.value = prompt
+function selectPrompt(prompt: (typeof prompts)[number]) {
+  input.value = ''
+  error.value = ''
+  response.value = prompt.answer
 }
 
 function startRecognition() {

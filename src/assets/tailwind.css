@@ -391,6 +391,58 @@ h2 span {
   padding: 0 5vw 3.5rem;
 }
 
+.experience {
+  padding-right: 0;
+  padding-left: 0;
+  background: rgba(245, 241, 232, 0.025);
+}
+
+.experience-card {
+  padding: 2.4rem 5vw 2.8rem;
+  border-top: 1px solid rgba(245, 241, 232, 0.12);
+}
+
+.experience-card:last-child {
+  border-bottom: 1px solid rgba(245, 241, 232, 0.12);
+}
+
+.experience-period,
+.experience-company {
+  color: #c5f25d;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.experience-main {
+  max-width: 54rem;
+}
+
+.experience-main h3 {
+  margin: 0.5rem 0 0.9rem;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+.experience-main > p:not(.experience-company),
+.experience-main li {
+  color: rgba(245, 241, 232, 0.62);
+  line-height: 1.7;
+}
+
+.experience-main ul {
+  display: grid;
+  gap: 0.45rem;
+  margin: 1.2rem 0 1.5rem;
+  padding-left: 1.2rem;
+}
+
+.experience-main li::marker {
+  color: #c5f25d;
+}
+
 .projects {
   padding-right: 0;
   padding-left: 0;
@@ -785,6 +837,15 @@ h2 span {
 
   .section-heading {
     padding-bottom: 1.6rem;
+  }
+
+  .experience-card {
+    padding-top: 1.6rem;
+    padding-bottom: 1.8rem;
+  }
+
+  .experience-period {
+    margin-bottom: 0.8rem;
   }
 
   .project-card {
