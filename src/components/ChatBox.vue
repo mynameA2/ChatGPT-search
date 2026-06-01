@@ -1,55 +1,126 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen bg-[#202A60] text-white px-4">
-    <div class="w-full max-w-xl text-center space-y-6">
-      <div class="text-5xl font-bold">Hi there!</div>
-      <div class="text-2xl font-semibold">What would you like to know?</div>
-      <p class="text-blue-200 text-base">
-        Use one of the most common prompts below<br />
-        or ask your own question
-      </p>
-      <div class="bg-white rounded-full flex items-center px-4 py-3 shadow-md w-full">
-        <button
-          @click="startRecognition"
-          class="text-blue-900 hover:text-blue-600 mr-2"
-          title="Speak"
-        >
-          🎤
-        </button>
-        <input
-          v-model="input"
-          @keyup.enter="sendMessage"
-          class="flex-1 bg-transparent outline-none text-blue-900 placeholder-blue-500"
-          type="text"
-          placeholder="Ask whatever you want"
-        />
-        <button
-          @click="sendMessage"
-          class="text-blue-900 hover:text-blue-600 ml-2"
-          title="Send"
-        >
-          ➤
+  <div class="chat-shell">
+    <div class="chat-topbar">
+      <div class="chat-agent">
+        <span class="agent-icon">AI</span>
+        <div>
+          <strong>A2 Career Assistant</strong>
+          <p><span class="status-dot"></span> Готов ответить HR</p>
+        </div>
+      </div>
+      <span class="chat-caption">AI-профиль кандидата</span>
+    </div>
+
+    <div class="chat-body">
+      <div class="chat-welcome">
+        <p class="chat-label">Для рекрутеров и команд</p>
+        <h3>Что вы хотите узнать обо мне?</h3>
+        <p>Выберите готовый вопрос или задайте свой. Ассистент отвечает по данным моего профиля.</p>
+      </div>
+
+      <div class="prompt-list">
+        <button v-for="prompt in prompts" :key="prompt" type="button" @click="selectPrompt(prompt)">
+          {{ prompt }}
+          <span aria-hidden="true">↗</span>
         </button>
       </div>
-      <div v-if="response" class="mt-6 text-left text-white bg-blue-800 p-4 rounded-lg">
-        <strong>AI:</strong> {{ response }}
+
+      <div v-if="error" class="chat-message chat-error">
+        <strong>Не удалось получить ответ</strong>
+        <p>{{ error }}</p>
+      </div>
+
+      <div v-if="response" class="chat-message chat-response">
+        <strong>A2 Career Assistant</strong>
+        <p>{{ response }}</p>
       </div>
     </div>
+
+    <form class="chat-form" @submit.prevent="sendMessage">
+      <button
+        type="button"
+        class="icon-button"
+        :class="{ active: isRecognizing }"
+        :disabled="isRecognizing"
+        title="Голосовой ввод"
+        aria-label="Голосовой ввод"
+        @click="startRecognition"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" />
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3" />
+        </svg>
+      </button>
+      <input
+        v-model="input"
+        type="text"
+        placeholder="Например: какой у кандидата стек?"
+        :disabled="loading"
+        aria-label="Текст вопроса"
+      />
+      <button
+        type="submit"
+        class="send-button"
+        :disabled="loading || !input.trim()"
+        aria-label="Отправить"
+      >
+        <span v-if="loading">...</span>
+        <svg v-else viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m5 12 14-7-4 14-3-6-7-1Z" />
+          <path d="m12 13 7-8" />
+        </svg>
+      </button>
+    </form>
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref } from 'vue'
+
+const prompts = [
+  'Какой у кандидата стек?',
+  'Расскажи о проектах',
+  'В чём сильные стороны кандидата?',
+]
 
 const input = ref('')
 const loading = ref(false)
 const response = ref('')
+const error = ref('')
 const isRecognizing = ref(false)
+
+interface SpeechRecognitionEvent {
+  results: ArrayLike<ArrayLike<{ transcript: string }>>
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string
+}
+
+interface SpeechRecognition {
+  lang: string
+  interimResults: boolean
+  onstart: (() => void) | null
+  onend: (() => void) | null
+  onresult: ((event: SpeechRecognitionEvent) => void) | null
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null
+  start: () => void
+}
+
+interface SpeechRecognitionConstructor {
+  new (): SpeechRecognition
+}
+
+interface WindowWithSpeechRecognition extends Window {
+  webkitSpeechRecognition?: SpeechRecognitionConstructor
+}
 
 let recognition: SpeechRecognition | null = null
 
-if ('webkitSpeechRecognition' in window) {
-  const SpeechRecognition = (window as any).webkitSpeechRecognition
+const SpeechRecognition = (window as WindowWithSpeechRecognition).webkitSpeechRecognition
+if (SpeechRecognition) {
   recognition = new SpeechRecognition()
-  recognition.lang = 'en-US'
+  recognition.lang = 'ru-RU'
   recognition.interimResults = false
 
   recognition.onstart = () => {
@@ -61,48 +132,54 @@ if ('webkitSpeechRecognition' in window) {
   }
 
   recognition.onresult = (event: SpeechRecognitionEvent) => {
-    const transcript = event.results[0][0].transcript
-    input.value = transcript
+    input.value = event.results[0][0].transcript
   }
 
   recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
     console.error('Speech recognition error:', event.error)
+    error.value = 'Голосовой ввод не сработал. Попробуй написать вопрос.'
     isRecognizing.value = false
   }
 }
 
+function selectPrompt(prompt: string) {
+  input.value = prompt
+}
+
 function startRecognition() {
   if (!recognition) {
-    alert('Speech recognition is not supported in this browser.')
+    error.value = 'Голосовой ввод не поддерживается в этом браузере.'
     return
   }
 
-  if (isRecognizing.value) {
-    console.warn('Recognition already in progress')
-    return
-  }
-
-  recognition.start()
-  isRecognizing.value = true
+  if (!isRecognizing.value) recognition.start()
 }
 
 async function sendMessage() {
-  if (!input.value.trim()) return
+  const message = input.value.trim()
+  if (!message || loading.value) return
 
   loading.value = true
+  error.value = ''
+  response.value = ''
+
   try {
     const res = await fetch('https://chatgpt-search-9j0p.onrender.com/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: input.value }),
+      body: JSON.stringify({ message }),
     })
 
-    const data = await res.json()
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Сервис временно недоступен.')
+    if (typeof data.reply !== 'string') throw new Error('AI вернул некорректный ответ.')
+
     response.value = data.reply
-  } catch (error) {
-    console.error('Error:', error)
-  } finally {
     input.value = ''
+  } catch (caughtError) {
+    console.error('Error:', caughtError)
+    error.value = caughtError instanceof Error ? caughtError.message : 'Что-то пошло не так.'
+  } finally {
     loading.value = false
   }
 }
