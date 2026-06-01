@@ -1,61 +1,86 @@
-# ChatGPT Voice UI 🎤🧠
+# A2 Portfolio
 
-Веб-приложение на Vue 3 + Tailwind CSS с голосовым вводом, использующее ChatGPT API через Node.js backend.
+Персональный сайт-визитка frontend-разработчика с AI-помощником для HR и команд.
 
-## 🚀 Функции
+На странице собраны навыки, проекты и контакты кандидата. Встроенный ассистент отвечает на
+вопросы о профиле текстом или через голосовой ввод и не придумывает отсутствующие данные.
 
-- 💬 Текстовый ввод и отправка вопросов к ChatGPT
-- 🎙 Голосовой ввод (Web Speech API, работает в Chrome/Edge)
-- 📦 Backend-прокси на Node.js с OpenAI API
-- 🌀 Стилизация с Tailwind CSS
+## Возможности
 
-## 🖥️ Скриншот
+- Адаптивная страница-портфолио с секциями «Обо мне», «Проекты» и «Контакты»
+- Отдельный HR-поиск по профилю кандидата
+- Готовые вопросы о навыках, проектах и сильных сторонах
+- Голосовой ввод через Web Speech API в Chrome и Edge
+- Backend-прокси для OpenAI API на Node.js и Express
+- Валидация сообщений и ограничение частоты запросов
 
-![screenshot](./screenshot.png)
+## Стек
 
-## 🛠 Установка
+- [Vue 3](https://vuejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vite.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Node.js](https://nodejs.org/) и [Express](https://expressjs.com/)
+- [OpenAI SDK](https://github.com/openai/openai-node)
+
+## Локальный запуск
+
+Клонируйте репозиторий и установите зависимости frontend:
 
 ```bash
-# Клонировать репозиторий
 git clone https://github.com/mynameA2/ChatGPT-search.git
-cd ChatGPT-search
-
-# Установить frontend
-cd chatgpt-voice-ui
+cd ChatGPT-search/chatgpt-voice-ui
 npm install
 ```
 
-## 🌐 Запуск frontend
+Запустите интерфейс:
 
 ```bash
 npm run dev
 ```
 
-## 🧠 Запуск backend
+В отдельном терминале установите зависимости и запустите backend:
 
 ```bash
 cd server
 npm install
-# Создай файл .env с ключом OpenAI:
-# OPENAI_API_KEY=sk-...
 node index.js
 ```
 
-## ⚙️ .env пример
+## Настройка OpenAI
+
+Создайте файл `server/.env`:
 
 ```env
-OPENAI_API_KEY=sk-...
+OPENAI_API_KEY=your_openai_api_key
 ```
 
-## 📦 Стек
+Ключ OpenAI API и биллинг API настраиваются отдельно от подписки ChatGPT. Никогда не
+добавляйте `.env` в git и не публикуйте ключ в README, логах или сообщениях.
 
-- [Vue 3](https://vuejs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Node.js + Express](https://expressjs.com/)
-- [OpenAI SDK](https://www.npmjs.com/package/openai)
+## Деплой
 
-## ⚠️ Важно
+Frontend можно опубликовать на Vercel, Netlify или другом статическом хостинге.
 
-🔒 Никогда не коммить `.env` или секретные ключи в репозиторий.  
-✅ Используйте `.env.example` и добавьте `.env` в `.gitignore`.
+Для backend на Render:
 
+1. Укажите корневую папку `chatgpt-voice-ui/server`.
+2. Используйте команду запуска `node index.js`.
+3. Добавьте переменную окружения `OPENAI_API_KEY`.
+4. Убедитесь, что для проекта OpenAI API подключён биллинг.
+
+URL backend сейчас задан в `src/components/ChatBox.vue`. При смене хостинга обновите адрес
+запроса `/api/chat`.
+
+## Изменение профиля кандидата
+
+Тексты портфолио находятся в `src/App.vue`. Данные, которыми пользуется HR-ассистент,
+находятся в константе `CANDIDATE_PROFILE` в `server/index.js`.
+
+Обновляйте оба места одновременно, чтобы страница и ответы AI не расходились.
+
+## Сборка
+
+```bash
+npm run build
+```
